@@ -1,5 +1,6 @@
 package com.example.springbootwithkotlin.home.controller
 
+import mu.KLogging
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.get
 @Suppress("NonAsciiCharacters")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HomeControllerTest {
+    companion object : KLogging()
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -28,5 +30,13 @@ class HomeControllerTest {
             }.andDo {
                 print()
             }
+    }
+
+    @Test
+    fun `로그를 콘솔,파일로 남긴다`(){
+        logger.debug("##### debug level log")
+        logger.info("##### info level log")
+        logger.warn("##### warn level log")
+        logger.error("##### error level log")
     }
 }

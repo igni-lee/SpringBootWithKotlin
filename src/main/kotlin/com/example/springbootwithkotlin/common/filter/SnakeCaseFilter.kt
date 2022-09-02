@@ -18,9 +18,7 @@ class SnakeCaseFilter : OncePerRequestFilter() {
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
-    ) {
-        filterChain.doFilter(contentCachingRequest(request), response)
-    }
+    ) = filterChain.doFilter(contentCachingRequest(request), response)
 
     override fun destroy() {
         logger.debug("================== SNAKE CASE FILTER : destroy ==================")

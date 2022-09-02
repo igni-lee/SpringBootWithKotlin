@@ -44,11 +44,12 @@ class HomeControllerTest {
 
     @Test
     fun `URI에 SnakeCase로 보내도 CamelCase로 변경된다`() {
-        mockMvc.get("/home/uri/snake_to_camel?access_token=fake&refresh_token=fake")
+        mockMvc.get("/home/uri/snake_to_camel?token=fake_token&access_token=fake_access_token&refresh_token=fake_refresh_token")
             .andExpect {
                 status { isOk() }
-                jsonPath("$.accessToken") { value("fake")}
-                jsonPath("$.refreshToken") { value("fake")}
+                jsonPath("$.token") { value("fake_token") }
+                jsonPath("$.access_token") { value("fake_access_token") }
+                jsonPath("$.refresh_token") { value("fake_refresh_token") }
             }.andDo {
                 print()
             }
@@ -58,10 +59,33 @@ class HomeControllerTest {
     fun `MediaType이 x-www-form-urlencoded 일때 SnakeCase로 보내도 CamelCase로 변경된다`() {
         mockMvc.post("/home/urlencoded/snake_to_camel") {
             contentType = MediaType.APPLICATION_FORM_URLENCODED
+            param("token", "fake_token")
             param("access_token", "fake_access_token")
             param("refresh_token", "fake_refresh_token")
         }.andExpect {
             status { isOk() }
+            jsonPath("$.token") { value("fake_token") }
+            jsonPath("$.access_token") { value("fake_access_token") }
+            jsonPath("$.refresh_token") { value("fake_refresh_token") }
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `MediaType이 json 일때 SnakeCase로 보내도 CamelCase로 변경된다`() {
+        mockMvc.post("/home/json/snake_to_camel") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{
+                "token": "fake_token",
+                "access_token":"fake_access_token",
+                "refresh_token":"fake_refresh_token"
+            }"""
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.token") { value("fake_token") }
+            jsonPath("$.access_token") { value("fake_access_token") }
+            jsonPath("$.refresh_token") { value("fake_refresh_token") }
         }.andDo {
             print()
         }

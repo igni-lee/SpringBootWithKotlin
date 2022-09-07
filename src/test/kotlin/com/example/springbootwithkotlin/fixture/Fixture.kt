@@ -14,8 +14,11 @@ class Fixture(
         companion object {
             val basicUser = UserEntity(
                 id = 1,
+                name = "이그니",
                 email = "test@test.com",
+                phoneNumber = "01012341234",
                 password = "password",
+                passwordSalt = "sMeo1Fh5"
             )
 
             val list = listOf(basicUser)

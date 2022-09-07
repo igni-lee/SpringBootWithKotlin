@@ -28,6 +28,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
     implementation("io.github.microutils:kotlin-logging:2.1.23")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
+    implementation("commons-codec:commons-codec:1.15")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

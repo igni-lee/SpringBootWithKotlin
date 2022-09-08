@@ -3,6 +3,7 @@ package com.example.springbootwithkotlin.user.entity
 import com.example.springbootwithkotlin.common.entity.BaseEntity
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.util.CryptUtil
+import com.example.springbootwithkotlin.user.util.RandomUtil
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -35,7 +36,7 @@ class UserEntity(
 ): BaseEntity() {
     companion object {
         fun from(signupDto: SignupDto): UserEntity {
-            val passwordSalt = CryptUtil.generateSalt()
+            val passwordSalt = RandomUtil.generateSalt()
             return UserEntity(
                 name = signupDto.name,
                 email = signupDto.email,

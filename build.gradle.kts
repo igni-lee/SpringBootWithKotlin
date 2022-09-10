@@ -31,6 +31,7 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:2.1.23")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
     implementation("commons-codec:commons-codec:1.15")
+    implementation("dev.akkinoc.util:yaml-resource-bundle:2.5.0")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

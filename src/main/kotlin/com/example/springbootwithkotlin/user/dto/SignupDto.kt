@@ -10,50 +10,59 @@ import javax.validation.constraints.Pattern
 import javax.validation.groups.Default
 
 data class SignupDto(
-    @field:Length(min = 2, message = "이름은 두글자 이상이어야 합니다.")
+    @field:Length(
+        message = "{validation.signup.name.too_short}",
+        groups = [ValidationGroups.Length::class],
+        min = 2,
+    )
     @field:Pattern(
-        message = "이름에 들어갈 수 없는 문자가 있습니다.",
+        message = "{validation.signup.name.invalid_char}",
         groups = [ValidationGroups.Pattern::class],
         regexp = """[a-zA-Z가-힣]+"""
     )
     val name: String,
 
     @field:NotBlank(
-        message = "이메일은 공백일 수 없습니다.",
+        message = "{validation.signup.email.not_blank}",
         groups = [ValidationGroups.NotBlank::class]
     )
     @field:Email(
+        message = "{validation.signup.email.invalid_format}",
         regexp = """^[a-zA-Z0-9_!#${'$'}%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+${'$'}""",
-        message = "올바른 이메일 형식이 아닙니다.",
         groups = [ValidationGroups.PatternCheck::class]
     )
     val email: String,
 
-    @field:Length(min = 6, max = 12, message = "비밀번호는 6자 이상, 12자 이하여야합니다.")
+    @field:Length(
+        message = "{validation.signup.password.invalid_length}",
+        groups = [ValidationGroups.Length::class],
+        min = 6,
+        max = 12
+    )
     @field:Pattern(
-        message = "비밀번호에 포함할 수 없는 특수문자가 있습니다.",
+        message = "{validation.signup.password.invalid_pattern}",
         groups = [ValidationGroups.Pattern::class],
         regexp = """[\x21-\x7E]+""",
     )
     val password: String,
 
     @field:NotBlank(
-        message = "휴대폰 번호는 공백일 수 없습니다.",
+        message = "{validation.signup.phone_number.not_blank}",
         groups = [ValidationGroups.NotBlank::class]
     )
     @field:Pattern(
-        message = "휴대폰 번호를 확인해주세요.",
+        message = "{validation.signup.phone_number.only_number}",
         groups = [ValidationGroups.Pattern::class],
         regexp = """[0-9]+"""
     )
     val phoneNumber: String,
-){
+) {
     init {
         isValidDomain()
     }
 
     @AssertTrue(
-        message = "유효하지 않은 도메인입니다.",
+        message = "{validation.signup.email.invalid_domain}",
         groups = [ValidationGroups.AssertDomain::class]
     )
     fun isValidDomain() = EmailUtil.isValidDomain(email)
@@ -61,6 +70,7 @@ data class SignupDto(
     @GroupSequence(
         Default::class,
         ValidationGroups.NotBlank::class,
+        ValidationGroups.Length::class,
         ValidationGroups.PatternCheck::class,
         ValidationGroups.AssertDomain::class,
         ValidationGroups.Pattern::class,
@@ -70,6 +80,7 @@ data class SignupDto(
 
     class ValidationGroups {
         interface NotBlank
+        interface Length
         interface PatternCheck
         interface AssertDomain
         interface Pattern

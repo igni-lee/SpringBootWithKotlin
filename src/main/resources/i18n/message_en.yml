@@ -1,4 +1,5 @@
 validation:
+  default: "Please check your input information again."
   signup:
     name:
       too_short: "The name must be at least two letters long."
@@ -7,6 +8,7 @@ validation:
       not_blank: "Email cannot be blank."
       invalid_format: "Invalid email format."
       invalid_domain: "Invalid domain."
+      duplicate: "Duplicate email."
     password:
       invalid_length: "Password must be at least 6 characters and no more than 12 characters."
       invalid_pattern: "There are special characters that cannot be included in the password."

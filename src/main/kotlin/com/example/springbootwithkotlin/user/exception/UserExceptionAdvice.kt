@@ -3,6 +3,8 @@ package com.example.springbootwithkotlin.user.exception
 import com.example.springbootwithkotlin.common.dto.ErrorResponseDto
 import com.example.springbootwithkotlin.user.controller.UserController
 import mu.KLogging
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.core.annotation.Order
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindException
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @Order(1)
 @RestControllerAdvice(assignableTypes = [UserController::class])
-class UserExceptionAdvice {
+class UserExceptionAdvice(
+    val messageSource: MessageSource,
+) {
 
     companion object : KLogging()
 
@@ -40,6 +44,7 @@ class UserExceptionAdvice {
             "NotBlank.signupDto.phoneNumber",
             "Pattern.signupDto.phoneNumber"
             -> "invalid_phone_number"
+
             else -> "invalid"
         }
 
@@ -51,5 +56,27 @@ class UserExceptionAdvice {
                     message = error.defaultMessage!!
                 )
             )
+    }
+
+    @ExceptionHandler(value = [SignupException::class])
+    fun signupException(ex: SignupException): ResponseEntity<ErrorResponseDto> {
+        val i18nCode = when (ex.code) {
+            "email_duplicate"
+            -> "validation.signup.email.duplicate"
+
+            else -> "validation.default"
+        }
+
+        return ResponseEntity(
+            ErrorResponseDto(
+                code = ex.code,
+                message = messageSource.getMessage(
+                    i18nCode,
+                    arrayOf(),
+                    LocaleContextHolder.getLocale()
+                )
+            ),
+            ex.status
+        )
     }
 }

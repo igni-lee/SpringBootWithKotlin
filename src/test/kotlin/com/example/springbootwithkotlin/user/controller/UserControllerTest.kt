@@ -1,10 +1,13 @@
 package com.example.springbootwithkotlin.user.controller
 
+import com.example.springbootwithkotlin.fixture.Fixture
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.repository.UserRepository
 import com.example.springbootwithkotlin.user.util.CryptUtil
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,11 +24,23 @@ import org.springframework.test.web.servlet.post
 class UserControllerTest(
     @Autowired
     val userRepository: UserRepository,
+    @Autowired
+    val fixture: Fixture,
 ) {
     @Autowired
     lateinit var mockMvc: MockMvc
 
     val objectMapper = ObjectMapper()
+
+    @BeforeEach
+    fun beforeEach() {
+        fixture.initData()
+    }
+
+    @AfterEach
+    fun afterEach() {
+        userRepository.deleteAll()
+    }
 
     @Test
     fun `올바른 이메일과 비밀번호로 가입할 수 있다`() {
@@ -153,6 +168,27 @@ class UserControllerTest(
             status { isBadRequest() }
             jsonPath("$.code") { value("invalid_email")}
             jsonPath("$.message") { value("유효하지 않은 도메인입니다.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `중복된 이메일로 가입할 수 없다`() {
+        val signupDto = SignupDto(
+            name = "이그니",
+            email = "test@test.com",
+            phoneNumber = "01083860731",
+            password = "password",
+        )
+
+        mockMvc.post("/user") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(signupDto)
+        }.andExpect {
+            status { isConflict() }
+            jsonPath("$.code") { value("email_duplicate")}
+            jsonPath("$.message") { value("중복된 이메일입니다.")}
         }.andDo {
             print()
         }

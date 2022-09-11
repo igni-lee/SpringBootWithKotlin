@@ -15,3 +15,10 @@ validation:
     phone_number:
       not_blank: "Mobile phone number cannot be blank."
       only_number: "Please enter only numbers for your mobile phone number."
+  login:
+    email:
+      not_blank: "Email cannot be blank."
+      invalid_format: "Invalid email format."
+    password:
+      invalid_length: "Password must be at least 6 characters and no more than 12 characters."
+      invalid_pattern: "There are special characters that cannot be included in the password."

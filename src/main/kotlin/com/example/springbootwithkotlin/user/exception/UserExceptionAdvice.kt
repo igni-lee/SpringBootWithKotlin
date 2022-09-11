@@ -35,10 +35,14 @@ class UserExceptionAdvice(
             "NotBlank.signupDto.email",
             "Email.signupDto.email",
             "AssertTrue.signupDto.validDomain",
+            "NotBlank.loginDto.email",
+            "Email.loginDto.email",
             -> "invalid_email"
             // PASSWORD
             "Length.signupDto.password",
             "Pattern.signupDto.password",
+            "Length.loginDto.password",
+            "Pattern.loginDto.password",
             -> "invalid_password"
             // PHONE NUMBER
             "NotBlank.signupDto.phoneNumber",
@@ -79,4 +83,17 @@ class UserExceptionAdvice(
             ex.status
         )
     }
+
+    @ExceptionHandler(value = [LoginException::class])
+    fun loginException(ex: LoginException): ResponseEntity<ErrorResponseDto> = ResponseEntity(
+        ErrorResponseDto(
+            code = "invalid_login",
+            message = messageSource.getMessage(
+                ex.code,
+                arrayOf(),
+                LocaleContextHolder.getLocale(),
+            )
+        ),
+        ex.status
+    )
 }

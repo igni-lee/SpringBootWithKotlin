@@ -17,7 +17,7 @@ class Fixture(
                 name = "이그니",
                 email = "test@test.com",
                 phoneNumber = "01012341234",
-                password = "password",
+                password = "\$6\$sMeo1Fh5\$Sr9svHnvb/ThyNceUn0AHqIgNHQVEXKklN3TBk9Et/QzhpHl11OHtCJM9d6aRQXQCMvhx66RrQl0IuSHw0nyx/",
                 passwordSalt = "sMeo1Fh5"
             )
 

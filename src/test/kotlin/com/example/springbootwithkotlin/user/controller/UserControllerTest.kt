@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.controller
 
 import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.dto.LoginDto
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.repository.UserRepository
 import com.example.springbootwithkotlin.user.util.CryptUtil
@@ -294,6 +295,156 @@ class UserControllerTest(
             status { isBadRequest() }
             jsonPath("$.code") { value("invalid_phone_number")}
             jsonPath("$.message") { value("휴대폰 번호는 숫자만 입력해주세요.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `이메일과 비밀번호로 로그인할 수 있다`(){
+        val loginDto = LoginDto(
+            email = "test@test.com",
+            password = "password",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isOk() }
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `이메일이 공백이면 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "     ",
+            password = "password",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_email")}
+            jsonPath("$.message") { value("이메일은 공백일 수 없습니다.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `존재하지 않는 이메일로 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@asdfasdf.com",
+            password = "password",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isNotFound() }
+            jsonPath("$.code") { value("invalid_login")}
+            jsonPath("$.message") { value("로그인 정보를 재확인해주세요.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `이메일 형식이 유효하지 않으면 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@test@com",
+            password = "password",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_email")}
+            jsonPath("$.message") { value("올바른 이메일 형식이 아닙니다.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `비밀번호가 다르면 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@test.com",
+            password = "fakeword",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_login")}
+            jsonPath("$.message") { value("로그인 정보를 재확인해주세요.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `비밀번호가 여섯글자 미만이면 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@test.com",
+            password = "pwd",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_password")}
+            jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `비밀번호가 열두글자 초과면 로그인 할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@test.com",
+            password = "passwordpasswordpassword",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_password")}
+            jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.")}
+        }.andDo {
+            print()
+        }
+    }
+
+    @Test
+    fun `비밀번호에 키보드로 입력할 수 없는 문자가 포함되면 로그인할 수 없다`(){
+        val loginDto = LoginDto(
+            email = "test@test.com",
+            password = "p☠ssword",
+        )
+
+        mockMvc.post("/user/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(loginDto)
+        }.andExpect {
+            status { isBadRequest() }
+            jsonPath("$.code") { value("invalid_password")}
+            jsonPath("$.message") { value("비밀번호에 포함할 수 없는 특수문자가 있습니다.")}
         }.andDo {
             print()
         }

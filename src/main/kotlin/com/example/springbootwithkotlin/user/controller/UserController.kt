@@ -1,5 +1,6 @@
 package com.example.springbootwithkotlin.user.controller
 
+import com.example.springbootwithkotlin.user.dto.LoginDto
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.service.UserService
 import org.springframework.validation.annotation.Validated
@@ -19,4 +20,11 @@ class UserController(
         @Validated(*[SignupDto.ValidationSequence::class])
         signupDto: SignupDto
     ) = userService.signup(signupDto)
+
+    @PostMapping("/login")
+    fun login(
+        @RequestBody
+        @Validated(*[LoginDto.ValidationSequence::class])
+        loginDto: LoginDto
+    ) = userService.login(loginDto)
 }

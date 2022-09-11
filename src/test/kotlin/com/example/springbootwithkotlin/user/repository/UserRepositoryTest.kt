@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.repository
 
 import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.util.CryptUtil
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -29,6 +30,6 @@ class UserRepositoryTest(
 
         Assertions.assertNotNull(basicUser)
         Assertions.assertEquals("test@test.com", basicUser.email)
-        Assertions.assertEquals("password", basicUser.password)
+        Assertions.assertEquals(basicUser.password, CryptUtil.crypt("password", basicUser.passwordSalt))
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @AutoConfigureMockMvc
@@ -32,6 +33,7 @@ class UserControllerTest(
     lateinit var mockMvc: MockMvc
 
     val objectMapper = ObjectMapper()
+    val basicUser = Fixture.User.basicUser
 
     @BeforeEach
     fun beforeEach() {
@@ -448,5 +450,29 @@ class UserControllerTest(
         }.andDo {
             print()
         }
+    }
+
+    @Test
+    fun `이메일로 사용자를 검색할 수 있다`(){
+        mockMvc.get("/user/${basicUser.email}")
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.id") { value(basicUser.id)}
+                jsonPath("$.name") { value(basicUser.name)}
+                jsonPath("$.email") { value(basicUser.email)}
+                jsonPath("$.phone_number") { value(basicUser.phoneNumber)}
+            }.andDo {
+                print()
+            }
+    }
+
+    @Test
+    fun `존재하지 않는 이메일로 사용자를 검색할 수 없다`() {
+        mockMvc.get("/user/notexist@test.com")
+            .andExpect {
+                status { isNotFound() }
+            }.andDo {
+                print()
+            }
     }
 }

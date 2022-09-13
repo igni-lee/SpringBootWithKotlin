@@ -96,4 +96,17 @@ class UserExceptionAdvice(
         ),
         ex.status
     )
+
+    @ExceptionHandler(value = [UserException::class])
+    fun userException(ex: UserException): ResponseEntity<ErrorResponseDto> = ResponseEntity(
+        ErrorResponseDto(
+            code = "user_not_found",
+            message = messageSource.getMessage(
+                ex.code,
+                arrayOf(),
+                LocaleContextHolder.getLocale(),
+            )
+        ),
+        ex.status,
+    )
 }

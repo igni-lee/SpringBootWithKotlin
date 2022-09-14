@@ -19,21 +19,21 @@ class UserEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     var name: String,
 
-    @Column(name="email", nullable = false)
-    var email:String,
+    @Column(name = "email", nullable = false)
+    var email: String,
 
-    @Column(name="phone_number", nullable = false)
-    var phoneNumber:String,
+    @Column(name = "phone_number", nullable = false)
+    var phoneNumber: String,
 
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
     var password: String,
 
-    @Column(name="password_salt", nullable = false)
+    @Column(name = "password_salt", nullable = false)
     var passwordSalt: String,
-): BaseEntity() {
+) : BaseEntity() {
     companion object {
         fun from(signupDto: SignupDto): UserEntity {
             val passwordSalt = RandomUtil.generateSalt()

@@ -8,7 +8,7 @@ data class SmsResponseDto(
     val statusCode: String,
     val statusName: String,
 ) {
-    constructor(): this(
+    constructor() : this(
         "",
         null,
         "",

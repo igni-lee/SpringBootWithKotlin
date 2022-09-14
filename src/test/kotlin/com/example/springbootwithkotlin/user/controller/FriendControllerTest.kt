@@ -29,7 +29,7 @@ class FriendControllerTest(
     fun `친구신청을 보낼 수 있다`() {
         mockMvc.post("/friend") {
             contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(FriendAddDto(1,2))
+            content = objectMapper.writeValueAsString(FriendAddDto(1, 2))
         }.andExpect {
             status { isOk() }
         }.andDo {
@@ -40,7 +40,5 @@ class FriendControllerTest(
         friendRelations.forEach {
             println("|${it.id}|${it.requester}|${it.acceptor}|${it.status}|${it.createdAt}|${it.updatedAt}")
         }
-
     }
-
 }

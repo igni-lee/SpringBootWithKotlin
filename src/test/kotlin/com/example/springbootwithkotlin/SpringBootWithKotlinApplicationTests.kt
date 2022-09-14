@@ -9,5 +9,4 @@ class SpringBootWithKotlinApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

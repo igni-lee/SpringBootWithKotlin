@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.util.ContentCachingResponseWrapper
-import java.util.*
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class LogInterceptor: HandlerInterceptor {
+class LogInterceptor : HandlerInterceptor {
     companion object : KLogging()
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
@@ -43,7 +43,7 @@ class LogInterceptor: HandlerInterceptor {
         val responseHeaderMap = makeResponseHeaderMap(contentCachingResponseWrapper)
         val responseBody = String(contentCachingResponseWrapper.contentAsByteArray)
 
-        logger.info("HTTP Response code : ${contentCachingResponseWrapper.status} / Response Headers : $responseHeaderMap / response body : $responseBody / duration : $duration" )
+        logger.info("HTTP Response code : ${contentCachingResponseWrapper.status} / Response Headers : $responseHeaderMap / response body : $responseBody / duration : $duration")
     }
 
     private fun makeRequestHeaderMap(request: HttpServletRequest): MutableMap<String, String> {

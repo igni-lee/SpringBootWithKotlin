@@ -1,6 +1,6 @@
 package com.example.springbootwithkotlin.user.util
 
-import java.util.*
+import java.util.Hashtable
 import javax.naming.directory.InitialDirContext
 
 class EmailUtil {

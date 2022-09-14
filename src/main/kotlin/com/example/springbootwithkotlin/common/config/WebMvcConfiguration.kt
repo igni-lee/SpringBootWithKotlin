@@ -10,12 +10,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
-import java.util.*
+import java.util.Locale
+import java.util.ResourceBundle
 
 @Configuration
 class WebMvcConfiguration(
     private val logInterceptor: LogInterceptor,
-): WebMvcConfigurer {
+) : WebMvcConfigurer {
     @Bean
     fun localeResolver() = SessionLocaleResolver().apply {
         setDefaultLocale(Locale.KOREAN)
@@ -34,7 +35,6 @@ class WebMvcConfiguration(
         setDefaultEncoding(encoding)
         setFallbackToSystemLocale(true)
     }
-
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(logInterceptor)

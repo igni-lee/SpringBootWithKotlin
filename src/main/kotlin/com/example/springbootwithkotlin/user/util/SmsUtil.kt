@@ -58,7 +58,7 @@ class SmsUtil(
         val randomNumber = RandomUtil.generateRandomNumber()
         val message = SmsRequestDto.Message(
             to = to,
-            content = "[IGNI-TEST] 인증번호(${randomNumber})를 입력해주세요."
+            content = "[IGNI-TEST] 인증번호($randomNumber)를 입력해주세요."
         )
 
         val smsRequestDto = SmsRequestDto(
@@ -103,6 +103,6 @@ class SmsUtil(
         smsEntity.authNumber = randomNumber
         smsRepository.save(smsEntity)
 
-        //TODO: WebClient 일반화 작업 필요
+        // TODO: WebClient 일반화 작업 필요
     }
 }

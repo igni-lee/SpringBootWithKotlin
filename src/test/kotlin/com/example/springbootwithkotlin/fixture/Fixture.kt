@@ -23,7 +23,6 @@ class Fixture(
 
             val list = listOf(basicUser)
         }
-
     }
 
     fun initData() {

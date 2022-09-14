@@ -6,5 +6,4 @@ abstract class GlobalException(
     val httpStatus: HttpStatus,
     val errorCode: String,
     val i18nCode: String,
-): RuntimeException() {
-}
+) : RuntimeException()

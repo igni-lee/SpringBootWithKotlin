@@ -62,51 +62,16 @@ class UserExceptionAdvice(
             )
     }
 
-    @ExceptionHandler(value = [SignupException::class])
-    fun signupException(ex: SignupException): ResponseEntity<ErrorResponseDto> {
-        val i18nCode = when (ex.code) {
-            "email_duplicate"
-            -> "validation.signup.email.duplicate"
-
-            else -> "validation.default"
-        }
-
-        return ResponseEntity(
-            ErrorResponseDto(
-                code = ex.code,
-                message = messageSource.getMessage(
-                    i18nCode,
-                    arrayOf(),
-                    LocaleContextHolder.getLocale()
-                )
-            ),
-            ex.status
-        )
-    }
-
-    @ExceptionHandler(value = [LoginException::class])
-    fun loginException(ex: LoginException): ResponseEntity<ErrorResponseDto> = ResponseEntity(
-        ErrorResponseDto(
-            code = "invalid_login",
-            message = messageSource.getMessage(
-                ex.code,
-                arrayOf(),
-                LocaleContextHolder.getLocale(),
-            )
-        ),
-        ex.status
-    )
-
     @ExceptionHandler(value = [UserException::class])
     fun userException(ex: UserException): ResponseEntity<ErrorResponseDto> = ResponseEntity(
         ErrorResponseDto(
-            code = "user_not_found",
+            code = ex.errorCode,
             message = messageSource.getMessage(
-                ex.code,
+                ex.i18nCode,
                 arrayOf(),
                 LocaleContextHolder.getLocale(),
             )
         ),
-        ex.status,
+        ex.httpStatus,
     )
 }

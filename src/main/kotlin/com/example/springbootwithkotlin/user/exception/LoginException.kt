@@ -1,8 +1,0 @@
-package com.example.springbootwithkotlin.user.exception
-
-import org.springframework.http.HttpStatus
-
-class LoginException(
-    val status: HttpStatus,
-    val code: String,
-): RuntimeException()

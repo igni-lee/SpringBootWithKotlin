@@ -22,6 +22,10 @@ validation:
     password:
       invalid_length: "Password must be at least 6 characters and no more than 12 characters."
       invalid_pattern: "There are special characters that cannot be included in the password."
+
+login:
+  fail: "Please check your account information again."
+
 search:
   user:
     not_found: "This account does not exist."

@@ -349,9 +349,9 @@ class UserControllerTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
-            status { isNotFound() }
-            jsonPath("$.code") { value("invalid_login")}
-            jsonPath("$.message") { value("로그인 정보를 재확인해주세요.")}
+            status { isBadRequest() }
+            jsonPath("$.code") { value("login_fail")}
+            jsonPath("$.message") { value("계정정보를 다시 확인해주세요.")}
         }.andDo {
             print()
         }
@@ -388,8 +388,8 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_login")}
-            jsonPath("$.message") { value("로그인 정보를 재확인해주세요.")}
+            jsonPath("$.code") { value("login_fail")}
+            jsonPath("$.message") { value("계정정보를 다시 확인해주세요.")}
         }.andDo {
             print()
         }

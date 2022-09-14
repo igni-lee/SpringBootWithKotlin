@@ -24,17 +24,20 @@ class UserService(
         userRepository.save(UserEntity.from(signupDto))
     }
 
+    @Transactional
     fun login(loginDto: LoginDto) {
-        val user = userRepository.findByEmail(loginDto.email).orElse(null) ?: throw UserException(UserExceptionCode.LOGIN_FAIL)
+        val user =
+            userRepository.findByEmail(loginDto.email).orElseThrow { throw UserException(UserExceptionCode.LOGIN_FAIL) }
 
         if (user.password != CryptUtil.crypt(loginDto.password, user.passwordSalt)) {
             throw UserException(UserExceptionCode.LOGIN_FAIL)
         }
     }
 
+    @Transactional
     fun searchByEmail(email: String): UserInfoDto {
         val user =
-            userRepository.findByEmail(email).orElse(null) ?: throw UserException(UserExceptionCode.USER_NOT_FOUND)
+            userRepository.findByEmail(email).orElseThrow { throw UserException(UserExceptionCode.USER_NOT_FOUND) }
 
         return UserInfoDto.fromEntity(user)
     }

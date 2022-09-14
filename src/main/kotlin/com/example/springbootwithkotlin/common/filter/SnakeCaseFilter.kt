@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.util.ContentCachingRequestWrapper
-import java.util.*
+import java.util.Collections
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -37,9 +37,9 @@ class SnakeCaseFilter(
             parameters[it.toLowerCamelCase()] = request.getParameterValues(it)
             logger.debug(
                 "snakeCase filter result : $it -> ${it.toLowerCamelCase()} : ${
-                    parameters[it.toLowerCamelCase()]?.joinToString(
-                        ","
-                    )
+                parameters[it.toLowerCamelCase()]?.joinToString(
+                    ","
+                )
                 }"
             )
         }

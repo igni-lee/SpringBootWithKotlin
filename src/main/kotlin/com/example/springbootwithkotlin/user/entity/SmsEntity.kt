@@ -22,8 +22,8 @@ class SmsEntity(
     @Column(name = "to_number", nullable = false)
     var toNumber: String,
 
-    @Column(name="auth_number", nullable = true)
-    var authNumber:String? = null,
+    @Column(name = "auth_number", nullable = true)
+    var authNumber: String? = null,
 
     @Column(name = "content", nullable = false)
     var content: String,
@@ -42,5 +42,4 @@ class SmsEntity(
 
     @Column(name = "is_used", nullable = false)
     var isUsed: Boolean = false,
-) {
-}
+)

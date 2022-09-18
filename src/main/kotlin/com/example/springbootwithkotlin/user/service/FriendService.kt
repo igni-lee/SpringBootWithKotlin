@@ -22,4 +22,8 @@ class FriendService(
 
         friendRepository.save(friendEntity)
     }
+
+    @Transactional
+    fun requestList(acceptor: Long) = friendRepository.findByAcceptorAndStatusOrderByCreatedAtDesc(acceptor, FriendAddStatus.PENDING)
+
 }

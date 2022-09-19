@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.controller
 
 import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.dto.LoginDto
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.repository.UserRepository
@@ -59,6 +60,8 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isOk() }
+            jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+            jsonPath("$.data") { isEmpty() }
         }.andDo {
             print()
         }
@@ -85,7 +88,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_name") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_NAME.name) }
             jsonPath("$.message") { value("이름은 두글자 이상이어야 합니다.") }
         }.andDo {
             print()
@@ -106,7 +109,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_name") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_NAME.name) }
             jsonPath("$.message") { value("이름에 들어갈 수 없는 문자가 있습니다.") }
         }.andDo {
             print()
@@ -127,7 +130,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_email") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_EMAIL.name) }
             jsonPath("$.message") { value("이메일은 공백일 수 없습니다.") }
         }.andDo {
             print()
@@ -148,7 +151,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_email") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_EMAIL.name) }
             jsonPath("$.message") { value("올바른 이메일 형식이 아닙니다.") }
         }.andDo {
             print()
@@ -169,7 +172,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_email") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_EMAIL.name) }
             jsonPath("$.message") { value("유효하지 않은 도메인입니다.") }
         }.andDo {
             print()
@@ -190,7 +193,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isConflict() }
-            jsonPath("$.code") { value("email_duplicate") }
+            jsonPath("$.code") { value(UserResponseCode.EMAIL_DUPLICATE.name) }
             jsonPath("$.message") { value("중복된 이메일입니다.") }
         }.andDo {
             print()
@@ -211,7 +214,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.") }
         }.andDo {
             print()
@@ -232,7 +235,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.") }
         }.andDo {
             print()
@@ -253,7 +256,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호에 포함할 수 없는 특수문자가 있습니다.") }
         }.andDo {
             print()
@@ -274,7 +277,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_phone_number") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PHONE_NUMBER.name) }
             jsonPath("$.message") { value("휴대폰 번호는 공백일 수 없습니다.") }
         }.andDo {
             print()
@@ -295,7 +298,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(signupDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_phone_number") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PHONE_NUMBER.name) }
             jsonPath("$.message") { value("휴대폰 번호는 숫자만 입력해주세요.") }
         }.andDo {
             print()
@@ -314,6 +317,8 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isOk() }
+            jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+            jsonPath("$.data") { isEmpty() }
         }.andDo {
             print()
         }
@@ -331,7 +336,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_email") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_EMAIL.name) }
             jsonPath("$.message") { value("이메일은 공백일 수 없습니다.") }
         }.andDo {
             print()
@@ -349,8 +354,8 @@ class UserControllerTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
-            status { isBadRequest() }
-            jsonPath("$.code") { value("login_fail") }
+            status { isUnauthorized() }
+            jsonPath("$.code") { value(UserResponseCode.LOGIN_FAIL.name) }
             jsonPath("$.message") { value("계정정보를 다시 확인해주세요.") }
         }.andDo {
             print()
@@ -369,7 +374,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_email") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_EMAIL.name) }
             jsonPath("$.message") { value("올바른 이메일 형식이 아닙니다.") }
         }.andDo {
             print()
@@ -387,8 +392,8 @@ class UserControllerTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
-            status { isBadRequest() }
-            jsonPath("$.code") { value("login_fail") }
+            status { isUnauthorized() }
+            jsonPath("$.code") { value(UserResponseCode.LOGIN_FAIL.name) }
             jsonPath("$.message") { value("계정정보를 다시 확인해주세요.") }
         }.andDo {
             print()
@@ -407,7 +412,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.") }
         }.andDo {
             print()
@@ -426,7 +431,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호는 6자 이상, 12자 이하여야합니다.") }
         }.andDo {
             print()
@@ -445,7 +450,7 @@ class UserControllerTest(
             content = objectMapper.writeValueAsString(loginDto)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.code") { value("invalid_password") }
+            jsonPath("$.code") { value(UserResponseCode.INVALID_PASSWORD.name) }
             jsonPath("$.message") { value("비밀번호에 포함할 수 없는 특수문자가 있습니다.") }
         }.andDo {
             print()
@@ -457,10 +462,12 @@ class UserControllerTest(
         mockMvc.get("/user/${basicUser.email}")
             .andExpect {
                 status { isOk() }
-                jsonPath("$.id") { value(basicUser.id) }
-                jsonPath("$.name") { value(basicUser.name) }
-                jsonPath("$.email") { value(basicUser.email) }
-                jsonPath("$.phone_number") { value(basicUser.phoneNumber) }
+                jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                jsonPath("$.data") { isNotEmpty() }
+                jsonPath("$.data.id") { value(basicUser.id) }
+                jsonPath("$.data.name") { value(basicUser.name) }
+                jsonPath("$.data.email") { value(basicUser.email) }
+                jsonPath("$.data.phone_number") { value(basicUser.phoneNumber) }
             }.andDo {
                 print()
             }
@@ -470,7 +477,9 @@ class UserControllerTest(
     fun `존재하지 않는 이메일로 사용자를 검색할 수 없다`() {
         mockMvc.get("/user/notexist@test.com")
             .andExpect {
-                status { isNotFound() }
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.USER_NOT_FOUND.name) }
+                jsonPath("$.message") { value("존재하지 않는 계정입니다.") }
             }.andDo {
                 print()
             }

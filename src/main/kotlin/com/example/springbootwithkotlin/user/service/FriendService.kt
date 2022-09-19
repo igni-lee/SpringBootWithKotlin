@@ -25,5 +25,4 @@ class FriendService(
 
     @Transactional
     fun requestList(acceptor: Long) = friendRepository.findByAcceptorAndStatusOrderByCreatedAtDesc(acceptor, FriendAddStatus.PENDING)
-
 }

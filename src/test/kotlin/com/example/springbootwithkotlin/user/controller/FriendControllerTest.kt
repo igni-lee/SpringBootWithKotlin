@@ -1,10 +1,10 @@
 package com.example.springbootwithkotlin.user.controller
 
 import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.repository.FriendRepository
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.aspectj.lang.annotation.After
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -52,6 +52,8 @@ class FriendControllerTest(
                 content = objectMapper.writeValueAsString(FriendAddDto(1, 2))
             }.andExpect {
                 status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                jsonPath("$.data") { isEmpty() }
             }.andDo {
                 print()
             }
@@ -67,7 +69,9 @@ class FriendControllerTest(
             mockMvc.get("/friend/request/1")
                 .andExpect {
                     status { isOk() }
-                    jsonPath("$.length()") { value(4)}
+                    jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                    jsonPath("$.data") { isNotEmpty() }
+                    jsonPath("$.data.length()") { value(4) }
                 }.andDo {
                     print()
                 }
@@ -78,11 +82,12 @@ class FriendControllerTest(
             mockMvc.get("/friend/request/999999999")
                 .andExpect {
                     status { isOk() }
-                    jsonPath("$.length()") { value(0)}
+                    jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                    jsonPath("$.data") { isEmpty() }
+                    jsonPath("$.data.length()") { value(0) }
                 }.andDo {
                     print()
                 }
         }
     }
-
 }

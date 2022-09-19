@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.exception
 
-import com.example.springbootwithkotlin.common.dto.ErrorResponseDto
+import com.example.springbootwithkotlin.common.response.Error
+import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.controller.UserController
 import mu.KLogging
 import org.springframework.context.MessageSource
@@ -20,7 +21,7 @@ class UserExceptionAdvice(
     companion object : KLogging()
 
     @ExceptionHandler(value = [BindException::class])
-    fun bindExceptionHandler(ex: BindException): ResponseEntity<ErrorResponseDto> {
+    fun bindExceptionHandler(ex: BindException): ResponseEntity<Error> {
         logger.debug("Exception ${ex.javaClass.simpleName} : ${ex.message}")
         logger.debug("codes : ${ex.bindingResult.allErrors.first().codes}")
 
@@ -30,32 +31,32 @@ class UserExceptionAdvice(
             // NAME
             "Length.signupDto.name",
             "Pattern.signupDto.name",
-            -> "invalid_name"
+            -> UserResponseCode.INVALID_NAME.name
             // EMAIL
             "NotBlank.signupDto.email",
             "Email.signupDto.email",
             "AssertTrue.signupDto.validDomain",
             "NotBlank.loginDto.email",
             "Email.loginDto.email",
-            -> "invalid_email"
+            -> UserResponseCode.INVALID_EMAIL.name
             // PASSWORD
             "Length.signupDto.password",
             "Pattern.signupDto.password",
             "Length.loginDto.password",
             "Pattern.loginDto.password",
-            -> "invalid_password"
+            -> UserResponseCode.INVALID_PASSWORD.name
             // PHONE NUMBER
             "NotBlank.signupDto.phoneNumber",
             "Pattern.signupDto.phoneNumber"
-            -> "invalid_phone_number"
+            -> UserResponseCode.INVALID_PHONE_NUMBER.name
 
-            else -> "invalid"
+            else -> UserResponseCode.INVALID.name
         }
 
         return ResponseEntity
             .badRequest()
             .body(
-                ErrorResponseDto(
+                Error(
                     code = code,
                     message = error.defaultMessage!!
                 )
@@ -63,8 +64,8 @@ class UserExceptionAdvice(
     }
 
     @ExceptionHandler(value = [UserException::class])
-    fun userException(ex: UserException): ResponseEntity<ErrorResponseDto> = ResponseEntity(
-        ErrorResponseDto(
+    fun userException(ex: UserException): ResponseEntity<Error> = ResponseEntity(
+        Error(
             code = ex.errorCode,
             message = messageSource.getMessage(
                 ex.i18nCode,

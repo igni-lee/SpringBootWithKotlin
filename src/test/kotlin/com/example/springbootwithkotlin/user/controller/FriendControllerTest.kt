@@ -1,11 +1,14 @@
 package com.example.springbootwithkotlin.user.controller
 
 import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.constant.FriendAddStatus
 import com.example.springbootwithkotlin.user.constant.UserResponseCode
+import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.repository.FriendRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,6 +20,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,6 +36,8 @@ class FriendControllerTest(
     lateinit var mockMvc: MockMvc
 
     val objectMapper = ObjectMapper()
+
+    val friendRequest2 = Fixture.Friend.friendRequest2
 
     @BeforeEach
     fun beforeEach() {
@@ -88,6 +94,33 @@ class FriendControllerTest(
                 }.andDo {
                     print()
                 }
+        }
+
+        @Test
+        fun `친구신청을 수락할 수 있다`() {
+            val friendAcceptDto = FriendAcceptDto(
+                requestId = friendRequest2.id!!,
+                acceptor = friendRequest2.acceptor,
+                requester = friendRequest2.requester,
+            )
+
+            mockMvc.put("/friend/request") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(friendAcceptDto)
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                jsonPath("$.data.length()") { value(0) }
+            }.andDo {
+                print()
+            }
+
+            println(friendRequest2.updatedAt)
+
+            val acceptedFriendRequest = friendRepository.findById(friendRequest2.id!!).get()
+
+            Assertions.assertEquals(FriendAddStatus.ACCEPTED, acceptedFriendRequest.status)
+            Assertions.assertNotEquals(friendRequest2.updatedAt, acceptedFriendRequest.updatedAt)
         }
     }
 }

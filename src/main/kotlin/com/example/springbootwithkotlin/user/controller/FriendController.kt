@@ -1,11 +1,13 @@
 package com.example.springbootwithkotlin.user.controller
 
 import com.example.springbootwithkotlin.common.response.ResponseData
+import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.service.FriendService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -23,6 +25,12 @@ class FriendController(
     @PostMapping
     fun add(
         @RequestBody
-        friendAddDto: FriendAddDto
+        friendAddDto: FriendAddDto,
     ) = ResponseData(data = friendService.add(friendAddDto))
+
+    @PutMapping("/request")
+    fun accept(
+        @RequestBody
+        friendAcceptDto: FriendAcceptDto,
+    ) = ResponseData(data = friendService.accept(friendAcceptDto))
 }

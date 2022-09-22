@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.service
 
 import com.example.springbootwithkotlin.user.constant.FriendAddStatus
+import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.entity.FriendEntity
 import com.example.springbootwithkotlin.user.repository.FriendRepository
@@ -28,4 +29,9 @@ class FriendService(
     @Transactional
     fun friendRequestList(acceptor: Long) =
         friendRepositorySupport.findFriendRequestStatusPending(acceptor)
+
+    @Transactional
+    fun accept(friendAcceptDto: FriendAcceptDto) =
+        friendRepositorySupport.acceptFriendRequest(friendAcceptDto)
+
 }

@@ -1,6 +1,7 @@
 package com.example.springbootwithkotlin.user.repository
 
 import com.example.springbootwithkotlin.user.constant.FriendAddStatus
+import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.entity.FriendEntity
 import com.example.springbootwithkotlin.user.entity.QFriendEntity.friendEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Repository
 class FriendRepositorySupport(
     val jpaQueryFactory: JPAQueryFactory,
 ) : QuerydslRepositorySupport(FriendEntity::class.java) {
-    fun findFriendRequestStatusPending(acceptor: Long): MutableList<FriendEntity>? {
-        val result = jpaQueryFactory
+    fun findFriendRequestStatusPending(acceptor: Long): MutableList<FriendEntity> =
+        jpaQueryFactory
             .selectFrom(friendEntity)
             .where(
                 friendEntity.acceptor.eq(acceptor)
@@ -21,7 +22,17 @@ class FriendRepositorySupport(
             .orderBy(friendEntity.createdAt.desc())
             .fetch()
 
-        println(result)
-        return result
+
+    fun acceptFriendRequest(friendAcceptDto: FriendAcceptDto) {
+        jpaQueryFactory
+            .update(friendEntity)
+            .set(friendEntity.status, FriendAddStatus.ACCEPTED)
+            .where(
+                friendEntity.id.eq(friendAcceptDto.requestId)
+                    .and(friendEntity.acceptor.eq(friendAcceptDto.acceptor))
+                    .and(friendEntity.requester.eq(friendAcceptDto.requester))
+                    .and(friendEntity.status.eq(FriendAddStatus.PENDING))
+            )
+            .execute()
     }
 }

@@ -1,14 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    val kotlinVersion = "1.7.10"
     id("org.springframework.boot") version "2.7.3"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "10.2.0"
 
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
 }
 
 group = "com.example"
@@ -24,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -33,8 +36,11 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
     implementation("io.github.microutils:kotlin-logging:2.1.23")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
+    implementation("com.querydsl:querydsl-jpa")
     implementation("commons-codec:commons-codec:1.15")
     implementation("dev.akkinoc.util:yaml-resource-bundle:2.5.0")
+
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

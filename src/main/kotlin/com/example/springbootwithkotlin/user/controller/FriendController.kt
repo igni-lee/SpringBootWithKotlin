@@ -1,9 +1,8 @@
 package com.example.springbootwithkotlin.user.controller
 
-import com.example.springbootwithkotlin.common.response.Data
+import com.example.springbootwithkotlin.common.response.ResponseData
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.service.FriendService
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,11 +18,11 @@ class FriendController(
     @GetMapping("/request/{acceptorId}")
     fun requestList(
         @PathVariable acceptorId: Long,
-    ) = ResponseEntity.ok().body(Data(data = friendService.requestList(acceptorId)))
+    ) = ResponseData(data = friendService.friendRequestList(acceptorId))
 
     @PostMapping
     fun add(
         @RequestBody
         friendAddDto: FriendAddDto
-    ) = ResponseEntity.ok().body(Data(data = friendService.add(friendAddDto)))
+    ) = ResponseData(data = friendService.add(friendAddDto))
 }

@@ -1,5 +1,6 @@
 package com.example.springbootwithkotlin.user.controller
 
+import com.example.springbootwithkotlin.common.response.ResponseData
 import com.example.springbootwithkotlin.user.dto.LoginDto
 import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.service.UserService
@@ -19,17 +20,19 @@ class UserController(
     @PostMapping
     fun signup(
         @RequestBody
-        @Validated(*[SignupDto.ValidationSequence::class])
+        @Validated(SignupDto.ValidationSequence::class)
         signupDto: SignupDto
-    ) = userService.signup(signupDto)
+    ) = ResponseData(data = userService.signup(signupDto))
 
     @PostMapping("/login")
     fun login(
         @RequestBody
-        @Validated(*[LoginDto.ValidationSequence::class])
+        @Validated(LoginDto.ValidationSequence::class)
         loginDto: LoginDto
-    ) = userService.login(loginDto)
+    ) = ResponseData(data = userService.login(loginDto))
 
     @GetMapping("/{email}")
-    fun searchByEmail(@PathVariable("email") email: String) = userService.searchByEmail(email)
+    fun searchByEmail(
+        @PathVariable("email") email: String
+    ) = ResponseData(data = userService.searchByEmail(email))
 }

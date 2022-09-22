@@ -1,8 +1,13 @@
 package com.example.springbootwithkotlin.user.controller
 
+import com.example.springbootwithkotlin.fixture.Fixture
+import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.repository.FriendRepository
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @AutoConfigureMockMvc
@@ -18,6 +24,8 @@ import org.springframework.test.web.servlet.post
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FriendControllerTest(
     @Autowired
+    val fixture: Fixture,
+    @Autowired
     val friendRepository: FriendRepository,
 ) {
     @Autowired
@@ -25,20 +33,61 @@ class FriendControllerTest(
 
     val objectMapper = ObjectMapper()
 
-    @Test
-    fun `친구신청을 보낼 수 있다`() {
-        mockMvc.post("/friend") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(FriendAddDto(1, 2))
-        }.andExpect {
-            status { isOk() }
-        }.andDo {
-            print()
+    @BeforeEach
+    fun beforeEach() {
+        fixture.initData()
+    }
+
+    @AfterEach
+    fun afterEach() {
+        friendRepository.deleteAll()
+    }
+
+    @Nested
+    inner class `친구신청` {
+        @Test
+        fun `친구신청을 보낼 수 있다`() {
+            mockMvc.post("/friend") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(FriendAddDto(1, 2))
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                jsonPath("$.data") { isEmpty() }
+            }.andDo {
+                print()
+            }
+
+            val friendRelations = friendRepository.findAll()
+            friendRelations.forEach {
+                println("|${it.id}|${it.requester}|${it.acceptor}|${it.status}|${it.createdAt}|${it.updatedAt}")
+            }
         }
 
-        val friendRelations = friendRepository.findAll()
-        friendRelations.forEach {
-            println("|${it.id}|${it.requester}|${it.acceptor}|${it.status}|${it.createdAt}|${it.updatedAt}")
+        @Test
+        fun `요청 목록을 조회할 수 있다`() {
+            mockMvc.get("/friend/request/1")
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                    jsonPath("$.data") { isNotEmpty() }
+                    jsonPath("$.data.length()") { value(4) }
+                }.andDo {
+                    print()
+                }
+        }
+
+        @Test
+        fun `요청 목록이 없으면 빈 배열을 응답받는다`() {
+            mockMvc.get("/friend/request/999999999")
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                    jsonPath("$.data") { isEmpty() }
+                    jsonPath("$.data.length()") { value(0) }
+                }.andDo {
+                    print()
+                }
         }
     }
 }

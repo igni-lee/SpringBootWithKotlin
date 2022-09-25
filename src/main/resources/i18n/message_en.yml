@@ -29,3 +29,6 @@ login:
 search:
   user:
     not_found: "This account does not exist."
+
+friend:
+  not_exist_request: "This is a friend request that doesn't exist."

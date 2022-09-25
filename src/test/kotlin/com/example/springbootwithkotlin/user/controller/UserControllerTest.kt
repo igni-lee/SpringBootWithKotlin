@@ -7,7 +7,6 @@ import com.example.springbootwithkotlin.user.dto.SignupDto
 import com.example.springbootwithkotlin.user.repository.UserRepository
 import com.example.springbootwithkotlin.user.util.CryptUtil
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,10 +40,10 @@ class UserControllerTest(
         fixture.initData()
     }
 
-    @AfterEach
-    fun afterEach() {
-        userRepository.deleteAll()
-    }
+//    @AfterEach
+//    fun afterEach() {
+//        userRepository.deleteAll()
+//    }
 
     @Test
     fun `올바른 이메일과 비밀번호로 가입할 수 있다`() {

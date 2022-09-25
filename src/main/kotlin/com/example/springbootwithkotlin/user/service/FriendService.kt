@@ -1,9 +1,11 @@
 package com.example.springbootwithkotlin.user.service
 
 import com.example.springbootwithkotlin.user.constant.FriendAddStatus
+import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.entity.FriendEntity
+import com.example.springbootwithkotlin.user.exception.UserException
 import com.example.springbootwithkotlin.user.repository.FriendRepository
 import com.example.springbootwithkotlin.user.repository.FriendRepositorySupport
 import org.springframework.stereotype.Service
@@ -31,7 +33,10 @@ class FriendService(
         friendRepositorySupport.findFriendRequestStatusPending(acceptor)
 
     @Transactional
-    fun accept(friendAcceptDto: FriendAcceptDto) =
-        friendRepositorySupport.acceptFriendRequest(friendAcceptDto)
+    fun accept(friendAcceptDto: FriendAcceptDto) {
+        val result = friendRepositorySupport.acceptFriendRequest(friendAcceptDto)
+
+        if(result != 1L) throw UserException(UserResponseCode.NOT_EXIST_FRIEND_REQUEST)
+    }
 
 }

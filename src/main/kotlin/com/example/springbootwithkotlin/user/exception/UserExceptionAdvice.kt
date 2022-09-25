@@ -2,6 +2,7 @@ package com.example.springbootwithkotlin.user.exception
 
 import com.example.springbootwithkotlin.common.response.Error
 import com.example.springbootwithkotlin.user.constant.UserResponseCode
+import com.example.springbootwithkotlin.user.controller.FriendController
 import com.example.springbootwithkotlin.user.controller.UserController
 import mu.KLogging
 import org.springframework.context.MessageSource
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @Order(1)
-@RestControllerAdvice(assignableTypes = [UserController::class])
+@RestControllerAdvice(assignableTypes = [UserController::class, FriendController::class])
 class UserExceptionAdvice(
     val messageSource: MessageSource,
 ) {

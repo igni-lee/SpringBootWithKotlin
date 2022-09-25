@@ -7,7 +7,6 @@ import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
 import com.example.springbootwithkotlin.user.repository.FriendRepository
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -39,18 +38,14 @@ class FriendControllerTest(
 
     val friendRequest2 = Fixture.Friend.friendRequest2
 
-    @BeforeEach
-    fun beforeEach() {
-        fixture.initData()
-    }
-
-    @AfterEach
-    fun afterEach() {
-        friendRepository.deleteAll()
-    }
-
     @Nested
-    inner class `친구신청` {
+    @Suppress("NonAsciiCharacters")
+    inner class 친구신청 {
+        @BeforeEach
+        fun beforeEach() {
+            fixture.initData()
+        }
+
         @Test
         fun `친구신청을 보낼 수 있다`() {
             mockMvc.post("/friend") {
@@ -98,6 +93,11 @@ class FriendControllerTest(
 
         @Test
         fun `친구신청을 수락할 수 있다`() {
+            val friendRelations = friendRepository.findAll()
+            friendRelations.forEach {
+                println("|${it.id}|${it.requester}|${it.acceptor}|${it.status}|${it.createdAt}|${it.updatedAt}")
+            }
+
             val friendAcceptDto = FriendAcceptDto(
                 requestId = friendRequest2.id!!,
                 acceptor = friendRequest2.acceptor,
@@ -110,17 +110,37 @@ class FriendControllerTest(
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
-                jsonPath("$.data.length()") { value(0) }
+                jsonPath("$.data") { isEmpty() }
             }.andDo {
                 print()
             }
 
-            println(friendRequest2.updatedAt)
-
             val acceptedFriendRequest = friendRepository.findById(friendRequest2.id!!).get()
-
             Assertions.assertEquals(FriendAddStatus.ACCEPTED, acceptedFriendRequest.status)
             Assertions.assertNotEquals(friendRequest2.updatedAt, acceptedFriendRequest.updatedAt)
+        }
+
+        @Test
+        fun `유효하지 않은 친구 신청은 204응답을 받는다`() {
+            val friendAcceptDto = FriendAcceptDto(
+                requestId = 98127397816,
+                acceptor = friendRequest2.acceptor,
+                requester = friendRequest2.requester,
+            )
+
+            mockMvc.put("/friend/request") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(friendAcceptDto)
+            }.andExpect {
+                status { isNoContent() }
+                jsonPath("$.code") { value(UserResponseCode.NOT_EXIST_FRIEND_REQUEST.name) }
+                jsonPath("$.message") { value("존재하지 않는 친구요청입니다.") }
+            }.andDo {
+                print()
+            }
+
+            val acceptedFriendRequest = friendRepository.findById(friendRequest2.id!!).get()
+            Assertions.assertEquals(FriendAddStatus.PENDING, acceptedFriendRequest.status)
         }
     }
 }

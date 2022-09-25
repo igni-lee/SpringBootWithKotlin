@@ -8,12 +8,14 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
+import org.hibernate.annotations.GenericGenerator
 
 @Entity
 @Table(name = "friend")
 class FriendEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom")
+    @GenericGenerator(name = "custom", strategy = "com.example.springbootwithkotlin.common.entity.IdOrGenerate")
     var id: Long? = null,
 
     @Column(name = "requester", nullable = false)

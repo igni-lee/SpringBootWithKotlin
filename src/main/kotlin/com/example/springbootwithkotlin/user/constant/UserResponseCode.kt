@@ -19,5 +19,8 @@ enum class UserResponseCode(val httpStatus: HttpStatus, val i18nCode: String) {
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "login.fail"),
 
     // Search
-    USER_NOT_FOUND(HttpStatus.OK, "search.user.not_found")
+    USER_NOT_FOUND(HttpStatus.OK, "search.user.not_found"),
+
+    // Friend
+    NOT_EXIST_FRIEND_REQUEST(HttpStatus.NO_CONTENT, "friend.not_exist_request")
 }

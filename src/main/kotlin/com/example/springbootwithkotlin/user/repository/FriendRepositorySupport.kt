@@ -22,8 +22,7 @@ class FriendRepositorySupport(
             .orderBy(friendEntity.createdAt.desc())
             .fetch()
 
-
-    fun acceptFriendRequest(friendAcceptDto: FriendAcceptDto) {
+    fun acceptFriendRequest(friendAcceptDto: FriendAcceptDto) =
         jpaQueryFactory
             .update(friendEntity)
             .set(friendEntity.status, FriendAddStatus.ACCEPTED)
@@ -34,5 +33,5 @@ class FriendRepositorySupport(
                     .and(friendEntity.status.eq(FriendAddStatus.PENDING))
             )
             .execute()
-    }
+
 }

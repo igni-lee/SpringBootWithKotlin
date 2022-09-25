@@ -65,6 +65,9 @@ class Fixture(
     }
 
     fun initData() {
+        userRepository.deleteAll()
+        friendRepository.deleteAll()
+
         User.list.map { userRepository.save(it) }
         Friend.list.map { friendRepository.save(it) }
     }

@@ -8,12 +8,14 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
+import org.hibernate.annotations.GenericGenerator
 
 @Entity
 @Table(name = "sms", uniqueConstraints = [UniqueConstraint(name = "uk_sms_request_id", columnNames = ["request_id"])])
 class SmsEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "custom")
+    @GenericGenerator(name = "custom", strategy = "com.example.springbootwithkotlin.common.entity.IdOrGenerate")
     var id: Long? = null,
 
     @Column(name = "from_number", nullable = false)

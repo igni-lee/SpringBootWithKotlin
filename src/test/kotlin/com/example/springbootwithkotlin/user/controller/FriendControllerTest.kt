@@ -42,9 +42,7 @@ class FriendControllerTest(
     @Suppress("NonAsciiCharacters")
     inner class 친구신청 {
         @BeforeEach
-        fun beforeEach() {
-            fixture.initData()
-        }
+        fun beforeEach() = fixture.initData()
 
         @Test
         fun `친구신청을 보낼 수 있다`() {

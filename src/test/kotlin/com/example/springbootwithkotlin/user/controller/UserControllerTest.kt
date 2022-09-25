@@ -36,14 +36,7 @@ class UserControllerTest(
     val basicUser = Fixture.User.basicUser
 
     @BeforeEach
-    fun beforeEach() {
-        fixture.initData()
-    }
-
-//    @AfterEach
-//    fun afterEach() {
-//        userRepository.deleteAll()
-//    }
+    fun beforeEach() = fixture.initData()
 
     @Test
     fun `올바른 이메일과 비밀번호로 가입할 수 있다`() {

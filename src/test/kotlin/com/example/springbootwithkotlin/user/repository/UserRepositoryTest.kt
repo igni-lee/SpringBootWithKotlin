@@ -19,10 +19,7 @@ class UserRepositoryTest(
     val userRepository: UserRepository,
 ) {
     @BeforeEach
-    fun beforeEach() {
-        fixture.initData()
-    }
-
+    fun beforeEach() = fixture.initData()
     @Test
     fun `id로 사용자를 조회할 수 있다`() {
         val basicUser = userRepository.findById(1).orElse(null)

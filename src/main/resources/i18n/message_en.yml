@@ -32,3 +32,4 @@ search:
 
 friend:
   not_exist_request: "This is a friend request that doesn't exist."
+  not_exist_friend_relationship: "It's not a friendship."

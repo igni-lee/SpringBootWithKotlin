@@ -23,4 +23,5 @@ enum class UserResponseCode(val httpStatus: HttpStatus, val i18nCode: String) {
 
     // Friend
     NOT_EXIST_FRIEND_REQUEST(HttpStatus.NO_CONTENT, "friend.not_exist_request"),
+    NOT_EXIST_FRIEND_RELATIONSHIP(HttpStatus.OK, "friend.not_exist_friend_relationship")
 }

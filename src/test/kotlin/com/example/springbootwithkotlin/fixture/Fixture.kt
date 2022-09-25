@@ -68,7 +68,28 @@ class Fixture(
                 status = FriendAddStatus.PENDING,
             )
 
-            val list = listOf(friendRequest2, friendRequest3, friendRequest4, friendRequest5)
+            val friendRelationship1 = FriendEntity(
+                id = 5,
+                requester = 10,
+                acceptor = 1,
+                status = FriendAddStatus.ACCEPTED
+            )
+
+            val friendRelationship2 = FriendEntity(
+                id = 6,
+                requester = 1,
+                acceptor = 10,
+                status = FriendAddStatus.ACCEPTED
+            )
+
+            val list = listOf(
+                friendRequest2,
+                friendRequest3,
+                friendRequest4,
+                friendRequest5,
+                friendRelationship1,
+                friendRelationship2
+            )
         }
     }
 

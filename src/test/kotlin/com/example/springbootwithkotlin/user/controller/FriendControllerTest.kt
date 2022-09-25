@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
@@ -38,12 +39,11 @@ class FriendControllerTest(
 
     val friendRequest2 = Fixture.Friend.friendRequest2
 
-    @Nested
-    @Suppress("NonAsciiCharacters")
-    inner class 친구신청 {
-        @BeforeEach
-        fun beforeEach() = fixture.initData()
+    @BeforeEach
+    fun beforeEach() = fixture.initData()
 
+    @Nested
+    inner class 친구신청 {
         @Test
         fun `친구신청을 보낼 수 있다`() {
             mockMvc.post("/friend") {
@@ -153,6 +153,43 @@ class FriendControllerTest(
 
             val acceptedFriendRequest = friendRepository.findById(friendRequest2.id!!).get()
             Assertions.assertEquals(FriendAddStatus.PENDING, acceptedFriendRequest.status)
+        }
+    }
+
+    @Nested
+    inner class 친구끊기 {
+        @Test
+        fun `친구관계를 끊을 수 있다`() {
+            mockMvc.delete("/friend") {
+                param("unfriend_requester", "1")
+                param("unfriend_user", "10")
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.SUCCESS.name) }
+                jsonPath("$.data") { isEmpty() }
+            }.andDo {
+                print()
+            }
+
+            val allRelation = friendRepository.findAll()
+            Assertions.assertEquals(4, allRelation.size)
+        }
+
+        @Test
+        fun `존재하지 않는 친구관계는 끊을 수 없다`() {
+            mockMvc.delete("/friend") {
+                param("unfriend_requester", "2")
+                param("unfriend_user", "10")
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.NOT_EXIST_FRIEND_RELATIONSHIP.name) }
+                jsonPath("$.message") { value("친구관계가 아닙니다.") }
+            }.andDo {
+                print()
+            }
+
+            val allRelation = friendRepository.findAll()
+            Assertions.assertEquals(6, allRelation.size)
         }
     }
 }

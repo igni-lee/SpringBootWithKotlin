@@ -3,7 +3,9 @@ package com.example.springbootwithkotlin.user.controller
 import com.example.springbootwithkotlin.common.response.ResponseData
 import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
+import com.example.springbootwithkotlin.user.dto.UnfriendDto
 import com.example.springbootwithkotlin.user.service.FriendService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -33,4 +35,9 @@ class FriendController(
         @RequestBody
         friendAcceptDto: FriendAcceptDto,
     ) = ResponseData(data = friendService.accept(friendAcceptDto))
+
+    @DeleteMapping
+    fun unfriend(
+        unfriendDto: UnfriendDto,
+    ) = ResponseData(data = friendService.unfriend(unfriendDto))
 }

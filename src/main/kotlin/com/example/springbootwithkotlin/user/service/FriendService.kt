@@ -4,6 +4,7 @@ import com.example.springbootwithkotlin.user.constant.FriendAddStatus
 import com.example.springbootwithkotlin.user.constant.UserResponseCode
 import com.example.springbootwithkotlin.user.dto.FriendAcceptDto
 import com.example.springbootwithkotlin.user.dto.FriendAddDto
+import com.example.springbootwithkotlin.user.dto.UnfriendDto
 import com.example.springbootwithkotlin.user.entity.FriendEntity
 import com.example.springbootwithkotlin.user.exception.UserException
 import com.example.springbootwithkotlin.user.repository.FriendRepository
@@ -43,5 +44,13 @@ class FriendService(
         val result = friendRepositorySupport.acceptFriendRequest(friendAcceptDto)
 
         if (result != 1L) throw UserException(UserResponseCode.NOT_EXIST_FRIEND_REQUEST)
+    }
+
+    @Transactional
+    fun unfriend(unfriendDto: UnfriendDto) {
+        val friendRelationships = friendRepositorySupport.findFriendRelationship(unfriendDto)
+
+        if (friendRelationships.isEmpty()) throw UserException(UserResponseCode.NOT_EXIST_FRIEND_RELATIONSHIP)
+        friendRepositorySupport.deleteFriendRelationship(friendRelationships)
     }
 }

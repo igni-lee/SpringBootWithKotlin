@@ -32,3 +32,4 @@ search:
 
 friend:
   not_exist_request: "존재하지 않는 친구요청입니다."
+  not_exist_friend_relationship: "친구관계가 아닙니다."

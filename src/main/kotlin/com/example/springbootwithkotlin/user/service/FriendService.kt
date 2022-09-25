@@ -36,7 +36,6 @@ class FriendService(
     fun accept(friendAcceptDto: FriendAcceptDto) {
         val result = friendRepositorySupport.acceptFriendRequest(friendAcceptDto)
 
-        if(result != 1L) throw UserException(UserResponseCode.NOT_EXIST_FRIEND_REQUEST)
+        if (result != 1L) throw UserException(UserResponseCode.NOT_EXIST_FRIEND_REQUEST)
     }
-
 }

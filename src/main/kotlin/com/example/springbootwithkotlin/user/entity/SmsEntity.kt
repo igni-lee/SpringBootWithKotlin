@@ -1,5 +1,6 @@
 package com.example.springbootwithkotlin.user.entity
 
+import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -8,7 +9,6 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
-import org.hibernate.annotations.GenericGenerator
 
 @Entity
 @Table(name = "sms", uniqueConstraints = [UniqueConstraint(name = "uk_sms_request_id", columnNames = ["request_id"])])

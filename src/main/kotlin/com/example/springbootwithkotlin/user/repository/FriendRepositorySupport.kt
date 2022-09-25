@@ -33,5 +33,4 @@ class FriendRepositorySupport(
                     .and(friendEntity.status.eq(FriendAddStatus.PENDING))
             )
             .execute()
-
 }

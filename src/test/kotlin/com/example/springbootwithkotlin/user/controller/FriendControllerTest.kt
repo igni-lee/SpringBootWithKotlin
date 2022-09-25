@@ -64,6 +64,20 @@ class FriendControllerTest(
         }
 
         @Test
+        fun `존재하지 않는 계정으로 친구신청을 보낼 수 없다`() {
+            mockMvc.post("/friend") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(FriendAddDto(1, 7890243))
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.code") { value(UserResponseCode.USER_NOT_FOUND.name) }
+                jsonPath("$.message") { value("존재하지 않는 계정입니다.") }
+            }.andDo {
+                print()
+            }
+        }
+
+        @Test
         fun `요청 목록을 조회할 수 있다`() {
             mockMvc.get("/friend/request/1")
                 .andExpect {

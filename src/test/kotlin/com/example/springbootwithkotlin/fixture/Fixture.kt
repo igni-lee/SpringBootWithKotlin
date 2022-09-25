@@ -25,8 +25,16 @@ class Fixture(
                 password = "\$6\$sMeo1Fh5\$Sr9svHnvb/ThyNceUn0AHqIgNHQVEXKklN3TBk9Et/QzhpHl11OHtCJM9d6aRQXQCMvhx66RrQl0IuSHw0nyx/",
                 passwordSalt = "sMeo1Fh5"
             )
+            val friendRequestAcceptUser = UserEntity(
+                id = 2,
+                name = "많관부",
+                email = "friend@test.com",
+                phoneNumber = "01012341234",
+                password = "\$6\$sMeo1Fh5\$Sr9svHnvb/ThyNceUn0AHqIgNHQVEXKklN3TBk9Et/QzhpHl11OHtCJM9d6aRQXQCMvhx66RrQl0IuSHw0nyx/",
+                passwordSalt = "sMeo1Fh5"
+            )
 
-            val list = listOf(basicUser)
+            val list = listOf(basicUser, friendRequestAcceptUser)
         }
     }
 
